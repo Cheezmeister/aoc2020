@@ -1,10 +1,3 @@
-
-
-
-
-
-const day = 1;
-
 const input = `
 1977
 1515
