@@ -1,4 +1,8 @@
 const fs = require('fs');
+const Node = {
+  fs: require('fs'),
+  util: require('util'),
+}
 
 const stringInput = dayNumber =>
   fs.readFileSync(`input.${dayNumber}.txt`).
@@ -10,7 +14,16 @@ const lineInput = dayNumber =>
     split("\n")
 
 
-// TODO: Fancy colorized answer
+const color = (name) => (str) => {
+  const termcode = (v) => `\x1b[${v}m`
+  const [on, off] = Node.util.inspect.colors[name].map(termcode)
+  return `${on}${str}${off}`
+}
+
+const answer = color('green')
+
+const answerPart1 = (...a) => console.log('Your solution for part 1 is: ' + answer(a[0]), '!', a.slice(1).join(' '))
+const answerPart2 = (...a) => console.log('Your solution for part 2 is: ' + answer(a[0]), '!', a.slice(1).join(' '))
 
 const day1 = () => {
   const numbers = lineInput(1)
@@ -21,7 +34,7 @@ const day1 = () => {
       const b = +numbers[j];
 
       if (a + b === 2020) {
-        console.log('Your solution for part 1 is: ' + (a * b));
+        answerPart1(a * b);
         break;
       }
     }
@@ -35,7 +48,7 @@ const day1 = () => {
         const c = +numbers[k];
 
         if (a + b + c === 2020) {
-          console.log('Your solution for part 2 is: ' + (a * b * c));
+          answerPart2(a * b * c);
           break;
         }
       }
@@ -74,16 +87,20 @@ const day2 = () => {
   const isTrue = someBool => someBool;
 
   // Day 1
-  let numValid = lines.map(isValid(1)).
-    filter(isTrue).
-    length;
-  console.log('Your solution for part 1 is: ', numValid, ' valid passwords');
+  answerPart1(
+    lines.map(isValid(1)).
+      filter(isTrue).
+      length,
+    'valid passwords'
+  );
 
   // Day 2
-  numValid = lines.map(isValid(2)).
-    filter(isTrue).
-    length;
-  console.log('Your solution for part 2 is: ', numValid, ' valid passwords');
+  answerPart2(
+    lines.map(isValid(2)).
+      filter(isTrue).
+      length,
+    'valid passwords'
+  );
 }
 
 const solveDay = (number) => {
