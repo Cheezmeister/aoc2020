@@ -1,12 +1,19 @@
 const fs = require('fs');
 
-// TODO: Input reading helper
+const stringInput = dayNumber =>
+  fs.readFileSync(`input.${dayNumber}.txt`).
+    toString()
+
+const lineInput = dayNumber =>
+  stringInput(dayNumber).
+    trim().
+    split("\n")
+
+
 // TODO: Fancy colorized answer
 
 const day1 = () => {
-  const input = fs.readFileSync('input.1.txt').
-    toString();
-  const numbers = input.trim().split("\n");
+  const numbers = lineInput(1)
 
   for (let i = 0; i < numbers.length; ++i) {
     for (let j = i; j < numbers.length; ++j) {
@@ -38,10 +45,7 @@ const day1 = () => {
 
 const day2 = () => {
 
-  // read input
-  const lines = fs.readFileSync('input.2.txt').
-    toString().
-    split("\n");
+  const lines = lineInput(2)
 
   // check passwords
   const isValid = (part) => (line) => {
