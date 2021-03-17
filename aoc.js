@@ -13,6 +13,12 @@ const lineInput = dayNumber =>
     trim().
     split("\n")
 
+const paragraphInput = dayNumber =>
+  stringInput(dayNumber).
+    trim().
+    split("\n\n")
+
+
 // TODO: Maybe transpose to index by (x, y)
 const gridInput = dayNumber =>
   lineInput(dayNumber).map(s => s.split(''))
@@ -133,12 +139,51 @@ const day3 = () => {
   )
 }
 
+const day4 = () => {
+  const fields = [
+    'byr', 'iyr', 'eyr', 'hgt',
+    'hcl', 'ecl', 'pid', // 'cid',
+  ]
+  // const sortedFields = fields.sort().join()
+  const sortedFields = /byr,(cid,)?ecl,eyr,hcl,hgt,iyr,pid/
+
+  const passports = paragraphInput(4).map(p => p.split(/\s+/))
+
+  const validPassports = passports.
+    filter(p => !!p.
+      map(kvp => kvp.split(':')[0]).
+      sort().
+      join().
+      match(sortedFields))
+
+  answerPart1(validPassports.length)
+
+  console.log(validPassports.map(v => v.join(' & ')).join("\n---\n"))
+
+  /// 
+  // byr (Birth Year) - four digits; at least 1920 and at most 2002.
+  // iyr (Issue Year) - four digits; at least 2010 and at most 2020.
+  // eyr (Expiration Year) - four digits; at least 2020 and at most 2030.
+  // hgt (Height) - a number followed by either cm or in:
+  // If cm, the number must be at least 150 and at most 193.
+  // If in, the number must be at least 59 and at most 76.
+  // hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
+  // ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
+  // pid (Passport ID) - a nine-digit number, including leading zeroes.
+  // cid (Country ID) - ignored, missing or not.
+
+  
+
+
+}
+
 const solveDay = (number) => {
   console.log(`❄️ Day ${number} ❄️`);
   switch (number) {
     case 1: return day1();
     case 2: return day2();
     case 3: return day3();
+    case 4: return day4();
     default: console.log(`No such solver for day ${number}, man`);
   }
 }
@@ -146,3 +191,4 @@ const solveDay = (number) => {
 solveDay(1);
 solveDay(2);
 solveDay(3);
+solveDay(4);
