@@ -13,6 +13,9 @@ const lineInput = dayNumber =>
     trim().
     split("\n")
 
+// TODO: Maybe transpose to index by (x, y)
+const gridInput = dayNumber =>
+  lineInput(dayNumber).map(s => s.split(''))
 
 const color = (name) => (str) => {
   const termcode = (v) => `\x1b[${v}m`
@@ -103,13 +106,43 @@ const day2 = () => {
   );
 }
 
+const day3 = () => {
+  const grid = gridInput(3)
+  const checkSlope = (dx, dy) => {
+    let trees = 0
+    let x = 0
+    let y = 0
+
+    while (y < grid.length) {
+      const val = grid[y][x]
+      if (val === '#') ++trees
+      y += dy
+      x += dx
+      x %= grid[0].length
+    }
+    return trees
+  }
+
+  answerPart1(checkSlope(3, 1))
+  answerPart2(
+    checkSlope(1, 1) *
+    checkSlope(3, 1) *
+    checkSlope(5, 1) *
+    checkSlope(7, 1) *
+    checkSlope(1, 2)
+  )
+}
+
 const solveDay = (number) => {
   console.log(`❄️ Day ${number} ❄️`);
   switch (number) {
     case 1: return day1();
-    default: return day2();
+    case 2: return day2();
+    case 3: return day3();
+    default: console.log(`No such solver for day ${number}, man`);
   }
 }
 
 solveDay(1);
 solveDay(2);
+solveDay(3);
