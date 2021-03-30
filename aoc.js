@@ -158,7 +158,40 @@ const day4 = () => {
 
   answerPart1(validPassports.length)
 
-  console.log(validPassports.map(v => v.join(' & ')).join("\n---\n"))
+  const isStrictlyValid = rawPassport => {
+    const passport = rawPassport.map(kvp => {
+      const [k, v] = kvp.split(':')
+      return { [k]: v }
+    }).reduce((acc, val) => ({
+      ...acc,
+      ...val
+    }), {})
+
+    const heightValid = (p) => {
+      const match = passport.hgt.match(/^(\d+)(cm|in)$/)
+      if (match) {
+        const [_, hgt, unit] = match
+        if (unit === 'in' && hgt > 59 && hgt < 76) return true
+        if (unit === 'cm' && hgt > 150 && hgt < 193) return true
+      }
+      return false
+    }
+
+    if (passport.byr < 1920 || passport.byr > 2002) return false
+    if (passport.iyr < 2010 || passport.iyr > 2020) return false
+    if (passport.eyr < 2020 || passport.eyr > 2030) return false
+    if (!heightValid(passport)) return false
+    if (!passport.hcl.match(/^#[0-9a-f]{6}$/)) return false
+    if (!'amb blu brn gry grn hzl oth'.split(' ').includes(passport.ecl)) return false
+    if (!passport.pid.match(/^\d{9}$/)) return false
+
+    return true
+  }
+
+  console.log(validPassports.map(v => v.join('  ')).join("\n"))
+  answerPart2(validPassports.filter(isStrictlyValid).length)
+
+  // FIXME: 154 is too low
 
   /// 
   // byr (Birth Year) - four digits; at least 1920 and at most 2002.
@@ -184,6 +217,27 @@ const solveDay = (number) => {
     case 2: return day2();
     case 3: return day3();
     case 4: return day4();
+    case 5: return day5();
+    case 6: return day6();
+    case 7: return day7();
+    case 8: return day8();
+    case 9: return day9();
+    case 10: return day10();
+    case 11: return day11();
+    case 12: return day12();
+    case 13: return day13();
+    case 14: return day14();
+    case 15: return day15();
+    case 16: return day16();
+    case 17: return day17();
+    case 18: return day18();
+    case 19: return day19();
+    case 20: return day20();
+    case 21: return day21();
+    case 22: return day22();
+    case 23: return day23();
+    case 24: return day24();
+    case 25: return day25();
     default: console.log(`No such solver for day ${number}, man`);
   }
 }
