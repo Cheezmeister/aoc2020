@@ -191,6 +191,30 @@ const day4 = () => {
   answerPart2(validPassports.filter(isStrictlyValid).length)
 }
 
+const day5 = () => {
+  const seats = lineInput(5)
+
+  const seatIds = seats.map(seat => {
+    const s = seat.replaceAll('F', 0).replaceAll('B', 1).replaceAll('L', 0).replaceAll('R', 1)
+    const[row, col] = [s.slice(0, 7), s.slice(7, 10)].map(n => parseInt(n, 2))
+    return row * 8 + col
+  })
+
+  answerPart1(
+    seatIds.reduce(
+      (a, b) => Math.max(a, b)
+    )
+  )
+
+  seatIds.sort((a, b) => a - b)
+  for (let i = 0; i < seatIds.length; ++i) {
+    if (seatIds[i] < seatIds[i+1] - 1) {
+      return answerPart2(seatIds[i+1] - 1)
+    }
+  }
+}
+
+
 const solveDay = (number) => {
   console.log(`❄️ Day ${number} ❄️`);
   switch (number) {
@@ -227,3 +251,4 @@ solveDay(1);
 solveDay(2);
 solveDay(3);
 solveDay(4);
+solveDay(5);
