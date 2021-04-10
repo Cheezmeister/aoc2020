@@ -171,8 +171,8 @@ const day4 = () => {
       const match = passport.hgt.match(/^(\d+)(cm|in)$/)
       if (match) {
         const [_, hgt, unit] = match
-        if (unit === 'in' && hgt > 59 && hgt < 76) return true
-        if (unit === 'cm' && hgt > 150 && hgt < 193) return true
+        if (unit === 'in' && hgt >= 59  && hgt <= 76) return true
+        if (unit === 'cm' && hgt >= 150 && hgt <= 193) return true
       }
       return false
     }
@@ -188,26 +188,7 @@ const day4 = () => {
     return true
   }
 
-  console.log(validPassports.map(v => v.join('  ')).join("\n"))
   answerPart2(validPassports.filter(isStrictlyValid).length)
-
-  // FIXME: 154 is too low
-
-  /// 
-  // byr (Birth Year) - four digits; at least 1920 and at most 2002.
-  // iyr (Issue Year) - four digits; at least 2010 and at most 2020.
-  // eyr (Expiration Year) - four digits; at least 2020 and at most 2030.
-  // hgt (Height) - a number followed by either cm or in:
-  // If cm, the number must be at least 150 and at most 193.
-  // If in, the number must be at least 59 and at most 76.
-  // hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
-  // ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
-  // pid (Passport ID) - a nine-digit number, including leading zeroes.
-  // cid (Country ID) - ignored, missing or not.
-
-  
-
-
 }
 
 const solveDay = (number) => {
