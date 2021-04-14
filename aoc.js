@@ -23,6 +23,23 @@ const paragraphInput = dayNumber =>
 const gridInput = dayNumber =>
   lineInput(dayNumber).map(s => s.split(''))
 
+const theAlphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
+
+const sum = (a, b) => a + b
+
+const set = (...list) => new Set(list)
+
+// From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+const intersection = (setA, setB) => {
+  let _intersection = new Set()
+  for (let elem of setB) {
+    if (setA.has(elem)) {
+      _intersection.add(elem)
+    }
+  }
+  return _intersection
+}
+
 const color = (name) => (str) => {
   const termcode = (v) => `\x1b[${v}m`
   const [on, off] = Node.util.inspect.colors[name].map(termcode)
@@ -214,6 +231,30 @@ const day5 = () => {
   }
 }
 
+const day6 = () => {
+  const answers = paragraphInput(6)
+  answerPart1(
+    answers.map(group => (
+      new Set(
+        group.
+          replace(/\s/g, '').
+          split('')
+      ).size
+    )).reduce(sum, 0)
+  )
+
+  answerPart2(
+    answers.
+      map(group => group.split("\n")).
+      map(people =>
+        people.
+          map(person => new Set(person.split(''))).
+          reduce(intersection, new Set(theAlphabet))
+      ).
+      map(s => s.size).
+      reduce(sum, 0)
+  )
+}
 
 const solveDay = (number) => {
   console.log(`❄️ Day ${number} ❄️`);
@@ -252,3 +293,4 @@ solveDay(2);
 solveDay(3);
 solveDay(4);
 solveDay(5);
+solveDay(6);
