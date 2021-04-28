@@ -256,6 +256,33 @@ const day6 = () => {
   )
 }
 
+const day7 = () => {
+  const input = lineInput(7)
+  let possible = {}
+  const my_colors = ['shiny gold']
+  while (true) {
+    const prev_count = Object.keys(possible).length
+    input.forEach(line => {
+      const [ignored, color, rest] = line.match(/(.*) bags contain (.*)\./)
+
+      if (rest === 'no other bags') return
+
+      const contained = rest
+        .split(', ')
+        .map(bag => bag.match(/(\d+) (.*) bags?/))
+        .map(bag => bag[2])
+
+      if (contained.filter(b => my_colors.includes(b)).length) {
+        possible[color] = true
+        my_colors.push(color)
+      }
+    })
+    if (Object.keys(possible).length === prev_count) break
+  }
+  answerPart1(Object.keys(possible).length, 'bag colors')
+
+}
+
 const solveDay = (number) => {
   console.log(`❄️ Day ${number} ❄️`);
   switch (number) {
@@ -294,3 +321,4 @@ solveDay(3);
 solveDay(4);
 solveDay(5);
 solveDay(6);
+solveDay(7);
