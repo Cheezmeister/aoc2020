@@ -281,6 +281,28 @@ const day7 = () => {
   }
   answerPart1(Object.keys(possible).length, 'bag colors')
 
+  weights = {}
+  input.forEach(line => {
+    const [ignored, color, rest] = line.match(/(.*) bags contain (.*)\./)
+
+    if (rest === 'no other bags') {
+      weights[color] = 1
+    } else {
+      weights[color] = rest
+        .split(', ')
+        .map(bag => bag.match(/(\d+) (.*) bags?/))
+    }
+  })
+
+  const computeWeight = weight => {
+    if (typeof weight === 'number') return weight
+    return weight
+      .map(contained => contained[1] * computeWeight(weights[contained[2]]))
+      .reduce(sum, 0)
+  }
+
+  answerPart2(computeWeight(weights['shiny gold']))
+
 }
 
 const solveDay = (number) => {
