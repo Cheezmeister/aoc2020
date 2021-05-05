@@ -305,7 +305,27 @@ const day7 = () => {
 }
 
 const day8 = () => {
-  console.log('hello world')
+  const instructions = lineInput(8)
+  let ip = 0
+  let acc = 0
+  const visited = []
+  console.log(`input: ${instructions}`)
+  while (true) {
+    if (visited[ip]) break
+
+    const instruction = instructions[ip]
+    console.log(`Executing: ${instruction}`)
+    const [operation, argument] = instruction.split(' ')
+    const arg = Number(argument);
+    switch (operation) {
+      case 'nop': console.log('nop on ' + arg); break;
+      case 'acc': console.log(`acc (${acc}) += ` + arg); acc += arg; break;
+      case 'jmp': console.log(`ip (${ip}) += ` + arg); ip += arg; continue;
+    }
+    visited[ip] = true
+    ip++;
+  }
+  answerPart1(acc)
 }
 
 const solveDay = (number) => {
