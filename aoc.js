@@ -296,13 +296,16 @@ const day7 = () => {
 
   const computeWeight = weight => {
     if (typeof weight === 'number') return weight
-    return weight
+    return 1 + weight
       .map(contained => contained[1] * computeWeight(weights[contained[2]]))
       .reduce(sum, 0)
   }
 
-  answerPart2(computeWeight(weights['shiny gold']))
+  answerPart2(computeWeight(weights['shiny gold']) - 1, 'bags')
+}
 
+const day8 = () => {
+  console.log('hello world')
 }
 
 const solveDay = (number) => {
@@ -344,3 +347,4 @@ solveDay(4);
 solveDay(5);
 solveDay(6);
 solveDay(7);
+solveDay(8);
