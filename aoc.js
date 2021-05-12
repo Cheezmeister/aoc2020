@@ -28,6 +28,8 @@ const sum = (a, b) => a + b
 
 const set = (...list) => new Set(list)
 
+const cartesian = (a1, a2) => a1.flatMap(i => a2.map(j => [i, j]))
+
 // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 const intersection = (setA, setB) => {
   let _intersection = new Set()
@@ -373,6 +375,28 @@ const day8 = () => {
   }
 }
 
+const day9 = () => {
+  const preambleLength = 25
+  const sequence = lineInput(9).map(Number)
+  const preamble = sequence.slice(0, preambleLength)
+
+  const isValid = idx => {
+    const slice = sequence.slice(idx - preambleLength, idx)
+    return cartesian(slice, slice).
+      filter(p => p[1] !== p[0]).
+      some(pair => sum(...pair) === sequence[idx])
+  }
+
+  for (let i = preambleLength; i < sequence.length; ++i) {
+    if (!isValid(i)) {
+      return answerPart1(sequence[i])
+      // TODO: For part 2:
+      //       find a contiguous set of at least two numbers in your list which sum to the invalid number
+      //       add together the smallest and largest number in this contiguous range
+    }
+  }
+}
+
 const solveDay = (number) => {
   console.log(`❄️ Day ${number} ❄️`);
   switch (number) {
@@ -413,3 +437,4 @@ solveDay(5);
 solveDay(6);
 solveDay(7);
 solveDay(8);
+solveDay(9);
