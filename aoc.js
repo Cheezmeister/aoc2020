@@ -1,11 +1,11 @@
-const fs = require('fs');
 const Node = {
   fs: require('fs'),
   util: require('util'),
+  crypto: require('crypto'),
 }
 
 const stringInput = dayNumber =>
-  fs.readFileSync(`input.${dayNumber}.txt`).
+  Node.fs.readFileSync(`input.${dayNumber}.txt`).
     toString()
 
 const lineInput = dayNumber =>
@@ -17,7 +17,6 @@ const paragraphInput = dayNumber =>
   stringInput(dayNumber).
     trim().
     split("\n\n")
-
 
 // TODO: Maybe transpose to index by (x, y)
 const gridInput = dayNumber =>
@@ -304,28 +303,74 @@ const day7 = () => {
   answerPart2(computeWeight(weights['shiny gold']) - 1, 'bags')
 }
 
+// Day 8
 const day8 = () => {
   const instructions = lineInput(8)
   let ip = 0
   let acc = 0
-  const visited = []
-  console.log(`input: ${instructions}`)
+  let visited = []
   while (true) {
     if (visited[ip]) break
 
     const instruction = instructions[ip]
-    console.log(`Executing: ${instruction}`)
+    if (instruction === undefined) breaK
+
     const [operation, argument] = instruction.split(' ')
     const arg = Number(argument);
     switch (operation) {
-      case 'nop': console.log('nop on ' + arg); break;
-      case 'acc': console.log(`acc (${acc}) += ` + arg); acc += arg; break;
-      case 'jmp': console.log(`ip (${ip}) += ` + arg); ip += arg; continue;
+      case 'nop': break;
+      case 'acc': acc += arg; break;
+      case 'jmp': ip += arg; continue;
     }
     visited[ip] = true
     ip++;
   }
   answerPart1(acc)
+
+  // Part 2
+  for (let i in instructions) {
+
+    if (instructions[i].includes('acc')) continue
+
+    const ourInstructions = [...instructions]
+    if (ourInstructions[i].includes('nop'))
+      ourInstructions[i] = ourInstructions[i].replace('nop', 'jmp')
+    else if (ourInstructions[i].includes('jmp'))
+      ourInstructions[i] = ourInstructions[i].replace('jmp', 'nop')
+
+    ip = 0
+    acc = 0
+    visited = []
+
+    while (true) {
+      if (visited[ip]) break
+      visited[ip] = true
+
+      if (ip >= instructions.length) {
+        answerPart2(acc)
+        return
+      }
+
+      const instruction = ourInstructions[ip]
+      if (instruction === undefined) {
+        console.log(`undef instruction at ${ip} which is not ${instructions.length} ? This should never happen.`)
+        break
+      }
+
+      const [operation, argument] = instruction.split(' ')
+      const arg = Number(argument);
+      switch (operation) {
+        case 'acc':
+          acc += arg;
+          break;
+        case 'jmp':
+          ip += arg;
+          continue;
+      }
+      ip++;
+
+    }
+  }
 }
 
 const solveDay = (number) => {
