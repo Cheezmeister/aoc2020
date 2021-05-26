@@ -162,7 +162,6 @@ const day4 = () => {
     'byr', 'iyr', 'eyr', 'hgt',
     'hcl', 'ecl', 'pid', // 'cid',
   ]
-  // const sortedFields = fields.sort().join()
   const sortedFields = /byr,(cid,)?ecl,eyr,hcl,hgt,iyr,pid/
 
   const passports = paragraphInput(4).map(p => p.split(/\s+/))
@@ -389,10 +388,16 @@ const day9 = () => {
 
   for (let i = preambleLength; i < sequence.length; ++i) {
     if (!isValid(i)) {
-      return answerPart1(sequence[i])
-      // TODO: For part 2:
-      //       find a contiguous set of at least two numbers in your list which sum to the invalid number
-      //       add together the smallest and largest number in this contiguous range
+      answerPart1(sequence[i])
+      for (let count = 2; count < preambleLength; ++count) {
+        for (let j = i - 1; j >= count; --j) {
+          const contiguousSet = sequence.slice(j - count, j)
+          const theSum = contiguousSet.reduce(sum)
+          if (theSum === sequence[i]) {
+            return answerPart2(Math.min(...contiguousSet) + Math.max(...contiguousSet))
+          }
+        }
+      }
     }
   }
 }
