@@ -30,6 +30,8 @@ const set = (...list) => new Set(list)
 
 const cartesian = (a1, a2) => a1.flatMap(i => a2.map(j => [i, j]))
 
+const numerically = (a, b) => a - b
+
 // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 const intersection = (setA, setB) => {
   let _intersection = new Set()
@@ -402,6 +404,17 @@ const day9 = () => {
   }
 }
 
+const day10 = () => {
+  const joltages = lineInput(10).sort(numerically)
+  const deltas = {'1': 1, '3': 1} // 0 to 1 and N to N+3 are implied by requirements
+  for (let i = 1; i < joltages.length; ++i) {
+    const diff = joltages[i] - joltages[i-1]
+    deltas[diff]++
+  }
+
+  answerPart1(deltas[1] * deltas[3])
+}
+
 const solveDay = (number) => {
   console.log(`❄️ Day ${number} ❄️`);
   switch (number) {
@@ -443,3 +456,4 @@ solveDay(6);
 solveDay(7);
 solveDay(8);
 solveDay(9);
+solveDay(10);
