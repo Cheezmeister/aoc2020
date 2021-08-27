@@ -405,14 +405,37 @@ const day9 = () => {
 }
 
 const day10 = () => {
-  const joltages = lineInput(10).sort(numerically)
+  // const joltages = lineInput(10).sort(numerically)
+  const joltages = '28 33 18 42 31 14 46 20 48 47 24 23 49 45 19 38 39 11 1 32 25 35 8 17 7 9 4 2 34 10 3'.split(' ').sort(numerically)
   const deltas = {'1': 1, '3': 1} // 0 to 1 and N to N+3 are implied by requirements
+  let orderedDeltas = [1]
   for (let i = 1; i < joltages.length; ++i) {
     const diff = joltages[i] - joltages[i-1]
     deltas[diff]++
+    orderedDeltas.push(diff)
   }
 
   answerPart1(deltas[1] * deltas[3])
+
+  orderedDeltas.push(3)
+  // orderedDeltas = orderedDeltas.filter(n => (n < 3))
+  const arrangements = {}
+  const yeet = (odIn, start = 0) => {
+    arrangements[odIn] = true
+
+    for (let i = start; i < odIn.length - 1; ++i) {
+      if (odIn[i] + odIn[i+1] <= 3) {
+        const od = [...odIn]
+        const item = od.splice(i, 1)
+        od[i] += item[0]
+        process.stdout.write("\r" + od.join(','))
+        arrangements[od] || yeet(od, i)
+      }
+    }
+  }
+
+  yeet(orderedDeltas) // FIXME: This algo runs too slow
+  answerPart2(orderedDeltas, Object.keys(arrangements).length)
 }
 
 const solveDay = (number) => {
